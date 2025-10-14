@@ -80,7 +80,7 @@
         // IMPORTANT: Ajoutez le nom de l'image correspondant à chaque produit
         // Les images doivent être placées dans le dossier /images/
       const products = [
-    {id: 1, name: "Produit cosmétique 1", price: 27, volume: "50ml", image: "images/image1.jpg"},
+    {id: 1, name: "Produit cosmétique 1", price: 27, volume: "50ml", image: "images/Image1.jpg"},
     {id: 2, name: "Produit cosmétique 2", price: 27, volume: "50ml", image: "images/produit2.jpg"},
     {id: 3, name: "Produit cosmétique 3", price: 30, volume: "50ml", image: "images/produit3.jpg"},
     {id: 4, name: "Produit cosmétique 4", price: 30, volume: "50ml", image: "images/produit4.jpg"},
@@ -162,7 +162,7 @@
             grid.innerHTML = products.map(p => `
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='💆‍♀️'">
+                        <img src="${p.image}" alt="${p.name}">
                     </div>
                     <div class="product-info">
                         <div class="product-name">${p.name}</div>
