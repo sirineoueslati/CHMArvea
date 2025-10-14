@@ -136,13 +136,21 @@
         }
 
         .product-image {
+            height: 250px;
+            width: 100%;
+            object-fit: cover;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 3rem;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .product-info {
@@ -453,27 +461,29 @@
     </div>
 
     <script>
+        // IMPORTANT: Ajoutez le nom de l'image correspondant à chaque produit
+        // Les images doivent être placées dans le dossier /images/
         const products = [
-            {id: 1, name: "Crème hydratante visage", price: 27, volume: "50ml"},
-            {id: 2, name: "Sérum anti-âge", price: 30, volume: "30ml"},
-            {id: 3, name: "Huile d'argan bio", price: 40, volume: "100ml"},
-            {id: 4, name: "Lotion tonique", price: 24, volume: "200ml"},
-            {id: 5, name: "Masque purifiant", price: 27, volume: "75ml"},
-            {id: 6, name: "Crème contour des yeux", price: 28, volume: "15ml"},
-            {id: 7, name: "Gel nettoyant doux", price: 27, volume: "150ml"},
-            {id: 8, name: "Crème de nuit régénérante", price: 43, volume: "50ml"},
-            {id: 9, name: "Sérum vitamine C", price: 43, volume: "30ml"},
-            {id: 10, name: "Baume à lèvres", price: 18, volume: "15ml"},
-            {id: 11, name: "Eau micellaire", price: 32, volume: "100ml"},
-            {id: 12, name: "Mousse nettoyante", price: 27, volume: "150ml"},
-            {id: 13, name: "Crème solaire SPF50", price: 48, volume: "50ml"},
-            {id: 14, name: "Lait corps hydratant", price: 28, volume: "200ml"},
-            {id: 15, name: "Gommage visage", price: 30, volume: "100ml"},
-            {id: 16, name: "Huile sèche corps", price: 45, volume: "100ml"},
-            {id: 17, name: "Déodorant naturel", price: 18, volume: "50ml"},
-            {id: 18, name: "Shampooing réparateur", price: 25, volume: "250ml"},
-            {id: 19, name: "Après-shampooing", price: 25, volume: "250ml"},
-            {id: 20, name: "Masque capillaire", price: 36, volume: "200ml"}
+            {id: 1, name: "Crème hydratante visage", price: 27, volume: "50ml", image: "images/creme-hydratante.jpg"},
+            {id: 2, name: "Sérum anti-âge", price: 30, volume: "30ml", image: "images/serum-anti-age.jpg"},
+            {id: 3, name: "Huile d'argan bio", price: 40, volume: "100ml", image: "images/huile-argan.jpg"},
+            {id: 4, name: "Lotion tonique", price: 24, volume: "200ml", image: "images/lotion-tonique.jpg"},
+            {id: 5, name: "Masque purifiant", price: 27, volume: "75ml", image: "images/masque-purifiant.jpg"},
+            {id: 6, name: "Crème contour des yeux", price: 28, volume: "15ml", image: "images/contour-yeux.jpg"},
+            {id: 7, name: "Gel nettoyant doux", price: 27, volume: "150ml", image: "images/gel-nettoyant.jpg"},
+            {id: 8, name: "Crème de nuit régénérante", price: 43, volume: "50ml", image: "images/creme-nuit.jpg"},
+            {id: 9, name: "Sérum vitamine C", price: 43, volume: "30ml", image: "images/serum-vitamine-c.jpg"},
+            {id: 10, name: "Baume à lèvres", price: 18, volume: "15ml", image: "images/baume-levres.jpg"},
+            {id: 11, name: "Eau micellaire", price: 32, volume: "100ml", image: "images/eau-micellaire.jpg"},
+            {id: 12, name: "Mousse nettoyante", price: 27, volume: "150ml", image: "images/mousse-nettoyante.jpg"},
+            {id: 13, name: "Crème solaire SPF50", price: 48, volume: "50ml", image: "images/creme-solaire.jpg"},
+            {id: 14, name: "Lait corps hydratant", price: 28, volume: "200ml", image: "images/lait-corps.jpg"},
+            {id: 15, name: "Gommage visage", price: 30, volume: "100ml", image: "images/gommage-visage.jpg"},
+            {id: 16, name: "Huile sèche corps", price: 45, volume: "100ml", image: "images/huile-seche.jpg"},
+            {id: 17, name: "Déodorant naturel", price: 18, volume: "50ml", image: "images/deodorant.jpg"},
+            {id: 18, name: "Shampooing réparateur", price: 25, volume: "250ml", image: "images/shampooing.jpg"},
+            {id: 19, name: "Après-shampooing", price: 25, volume: "250ml", image: "images/apres-shampooing.jpg"},
+            {id: 20, name: "Masque capillaire", price: 36, volume: "200ml", image: "images/masque-capillaire.jpg"}
         ];
 
         let cart = [];
@@ -482,7 +492,9 @@
             const grid = document.getElementById('productsGrid');
             grid.innerHTML = products.map(p => `
                 <div class="product-card">
-                    <div class="product-image">💆‍♀️</div>
+                    <div class="product-image">
+                        <img src="${p.image}" alt="${p.name}" onerror="this.parentElement.innerHTML='💆‍♀️'">
+                    </div>
                     <div class="product-info">
                         <div class="product-name">${p.name}</div>
                         <div class="product-volume">${p.volume}</div>
