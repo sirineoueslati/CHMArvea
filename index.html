@@ -16,6 +16,7 @@
             <button class="cart-btn" onclick="toggleCart()">
                 🛒 Panier <span class="cart-count" id="cartCount">0</span>
             </button>
+            <button onclick="window.location.href='admin.html'" style="background: #c48b8b; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; cursor: pointer; font-weight: bold;"> Admin</button>
         </div>
     </header>
 
@@ -271,13 +272,62 @@
             document.getElementById('checkoutModal').style.display = 'none';
         }
 
-        function submitOrder(e) {
+        /* function submitOrder(e) {
             e.preventDefault();
             alert('Commande confirmée! Merci pour votre achat. Nous vous contacterons bientôt.');
             cart = [];
             updateCart();
             closeCheckout();
-        }
+        } */
+       // ✅ REMPLACER la fonction submitOrder par cette version:
+
+function submitOrder(e) {
+    e.preventDefault();
+
+    // Récupérer les données du formulaire
+    const form = e.target;
+    const fullName = form.querySelector('input[placeholder="Votre nom"]').value;
+    const phone = form.querySelector('input[placeholder="Votre numéro de téléphone"]').value;
+    const address = form.querySelector('textarea[placeholder="Adresse complète"]').value;
+    const city = form.querySelector('input[placeholder="Ville"]').value;
+    const notes = form.querySelectorAll('textarea')[1].value;
+
+    // Calculer le total
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    // Créer l'objet commande
+    const order = {
+        id: Date.now(),
+        client: fullName,
+        phone: phone,
+        address: address,
+        city: city,
+        notes: notes,
+        products: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            volume: item.volume
+        })),
+        total: total.toFixed(3),
+        status: 'pending',
+        date: new Date().toISOString()
+    };
+
+    // Sauvegarder dans localStorage
+    let orders = JSON.parse(localStorage.getItem('cmStoreOrders') || '[]');
+    orders.push(order);
+    localStorage.setItem('cmStoreOrders', JSON.stringify(orders));
+
+    // Message de confirmation
+    alert('Commande confirmée! Merci pour votre achat. Nous vous contacterons bientôt. #' + order.id);
+    
+    // Réinitialiser le panier et fermer
+    cart = [];
+    updateCart();
+    closeCheckout();
+}
 
         function filterProducts() {
             const search = document.getElementById('searchInput').value.toLowerCase();

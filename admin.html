@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Commandes | CM Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fef9f5 0%, #f5ebe0 100%);
+            min-height: 100vh;
+            color: #5a4a47;
+        }
+
+        header {
+            background: linear-gradient(135deg, #f5e8e3 0%, #f0ddd6 100%);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(212, 165, 165, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #c48b8b;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #d4a5a5 0%, #c48b8b 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 165, 165, 0.3);
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #d4a5a5 0%, #c48b8b 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-export:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 165, 165, 0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #c48b8b;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(212, 165, 165, 0.1);
+            border-left: 4px solid #d4a5a5;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a59291;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #c48b8b;
+        }
+
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(212, 165, 165, 0.1);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            color: #5a4a47;
+            font-size: 0.9rem;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 0.6rem;
+            border: 2px solid #e8d5d0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #c48b8b;
+        }
+
+        .orders-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(212, 165, 165, 0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #f5e8e3 0%, #f0ddd6 100%);
+        }
+
+        th {
+            padding: 1.2rem;
+            text-align: left;
+            font-weight: bold;
+            color: #c48b8b;
+            border-bottom: 2px solid #e8d5d0;
+        }
+
+        td {
+            padding: 1.2rem;
+            border-bottom: 1px solid #f0e5df;
+            color: #5a4a47;
+        }
+
+        tbody tr:hover {
+            background: #fef9f5;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.contacted {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .btn-action {
+            background: #d4a5a5;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            margin-right: 0.5rem;
+        }
+
+        .btn-action:hover {
+            background: #c48b8b;
+            transform: scale(1.05);
+        }
+
+        .btn-delete {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn-delete:hover {
+            background: #f5c6cb;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0e5df;
+        }
+
+        .modal-header h2 {
+            color: #c48b8b;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #a59291;
+        }
+
+        .order-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid #f0e5df;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #5a4a47;
+        }
+
+        .detail-value {
+            color: #a59291;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4a5a5 0%, #c48b8b 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(212, 165, 165, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0e5df;
+            color: #5a4a47;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #e8d5d0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #a59291;
+        }
+
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">📦 CM STORE - Admin</div>
+            <div class="header-actions">
+                <button class="btn-export" onclick="exportOrders()">📥 Exporter</button>
+                <button class="btn-back" onclick="window.location.href='index.html'">← Retour</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Gestion des Commandes</h1>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Commandes Total</div>
+                <div class="stat-value" id="totalOrders">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">En Attente</div>
+                <div class="stat-value" id="pendingOrders">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Confirmées</div>
+                <div class="stat-value" id="confirmedOrders">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Recontactées</div>
+                <div class="stat-value" id="contactedOrders">0</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Rechercher par nom</label>
+                <input type="text" id="searchName" placeholder="Nom client..." onkeyup="filterOrders()">
+            </div>
+            <div class="filter-group">
+                <label>Rechercher par téléphone</label>
+                <input type="text" id="searchPhone" placeholder="Numéro..." onkeyup="filterOrders()">
+            </div>
+            <div class="filter-group">
+                <label>Filtrer par statut</label>
+                <select id="filterStatus" onchange="filterOrders()">
+                    <option value="">Tous les statuts</option>
+                    <option value="pending">En Attente</option>
+                    <option value="confirmed">Confirmée</option>
+                    <option value="contacted">Recontactée</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="orders-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Client</th>
+                        <th>Téléphone</th>
+                        <th>Adresse</th>
+                        <th>Montant</th>
+                        <th>Statut</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersBody">
+                </tbody>
+            </table>
+            <div id="emptyState" class="empty-state" style="display: none;">
+                Aucune commande trouvée
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour détails commande -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Détails de la Commande</h2>
+                <button class="close-modal" onclick="closeModal()">×</button>
+            </div>
+            <div class="order-details" id="orderDetails"></div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allOrders = [];
+
+        // Charger les commandes depuis localStorage
+        function loadOrders() {
+            const stored = localStorage.getItem('cmStoreOrders');
+            allOrders = stored ? JSON.parse(stored) : [];
+            displayOrders(allOrders);
+            updateStats();
+        }
+
+        // Afficher les commandes
+        function displayOrders(orders) {
+            const tbody = document.getElementById('ordersBody');
+            const emptyState = document.getElementById('emptyState');
+
+            if (orders.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            tbody.innerHTML = orders.map((order, index) => `
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${order.client}</td>
+                    <td>${order.phone}</td>
+                    <td>${order.city}</td>
+                    <td>${order.total} DT</td>
+                    <td>
+                        <select class="status ${order.status}" onchange="updateOrderStatus(${order.id}, this.value)">
+                            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>En Attente</option>
+                            <option value="confirmed" ${order.status === 'confirmed' ? 'selected' : ''}>Confirmée</option>
+                            <option value="contacted" ${order.status === 'contacted' ? 'selected' : ''}>Recontactée</option>
+                        </select>
+                    </td>
+                    <td>${new Date(order.date).toLocaleDateString('fr-FR')}</td>
+                    <td>
+                        <button class="btn-action" onclick="viewOrder(${order.id})">👁️ Voir</button>
+                        <button class="btn-action btn-delete" onclick="deleteOrder(${order.id})">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Mettre à jour les statistiques
+        function updateStats() {
+            const total = allOrders.length;
+            const pending = allOrders.filter(o => o.status === 'pending').length;
+            const confirmed = allOrders.filter(o => o.status === 'confirmed').length;
+            const contacted = allOrders.filter(o => o.status === 'contacted').length;
+
+            document.getElementById('totalOrders').textContent = total;
+            document.getElementById('pendingOrders').textContent = pending;
+            document.getElementById('confirmedOrders').textContent = confirmed;
+            document.getElementById('contactedOrders').textContent = contacted;
+        }
+
+        // Filtrer les commandes
+        function filterOrders() {
+            const searchName = document.getElementById('searchName').value.toLowerCase();
+            const searchPhone = document.getElementById('searchPhone').value.toLowerCase();
+            const filterStatus = document.getElementById('filterStatus').value;
+
+            const filtered = allOrders.filter(order => {
+                const matchName = order.client.toLowerCase().includes(searchName);
+                const matchPhone = order.phone.toLowerCase().includes(searchPhone);
+                const matchStatus = !filterStatus || order.status === filterStatus;
+                return matchName && matchPhone && matchStatus;
+            });
+
+            displayOrders(filtered);
+        }
+
+        // Voir les détails d'une commande
+        function viewOrder(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const detailsHtml = `
+                <div class="detail-item">
+                    <span class="detail-label">ID Commande:</span>
+                    <span class="detail-value">#${order.id}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Nom Client:</span>
+                    <span class="detail-value">${order.client}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Téléphone:</span>
+                    <span class="detail-value">${order.phone}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Adresse:</span>
+                    <span class="detail-value">${order.address}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Ville:</span>
+                    <span class="detail-value">${order.city}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Notes:</span>
+                    <span class="detail-value">${order.notes || 'Aucune'}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Montant Total:</span>
+                    <span class="detail-value"><strong>${order.total} DT</strong></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Produits:</span>
+                </div>
+                <div style="margin-left: 1rem;">
+                    ${order.products.map(p => `
+                        <div class="detail-item">
+                            <span>${p.name} (${p.volume})</span>
+                            <span>${p.quantity} × ${p.price} DT</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Date:</span>
+                    <span class="detail-value">${new Date(order.date).toLocaleDateString('fr-FR')}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Statut:</span>
+                    <span class="detail-value">
+                        <span class="status ${order.status}">
+                            ${order.status === 'pending' ? 'En Attente' : order.status === 'confirmed' ? 'Confirmée' : 'Recontactée'}
+                        </span>
+                    </span>
+                </div>
+            `;
+
+            document.getElementById('orderDetails').innerHTML = detailsHtml;
+            document.getElementById('detailsModal').style.display = 'block';
+        }
+
+        // Fermer la modal
+        function closeModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+        }
+
+        // Mettre à jour le statut
+        function updateOrderStatus(orderId, newStatus) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (order) {
+                order.status = newStatus;
+                localStorage.setItem('cmStoreOrders', JSON.stringify(allOrders));
+                displayOrders(allOrders);
+                updateStats();
+            }
+        }
+
+        // Supprimer une commande
+        function deleteOrder(orderId) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cette commande?')) {
+                allOrders = allOrders.filter(o => o.id !== orderId);
+                localStorage.setItem('cmStoreOrders', JSON.stringify(allOrders));
+                displayOrders(allOrders);
+                updateStats();
+            }
+        }
+
+        // Exporter les commandes
+        function exportOrders() {
+            const csvContent = [
+                ['ID', 'Client', 'Téléphone', 'Adresse', 'Ville', 'Total', 'Statut', 'Date'],
+                ...allOrders.map(o => [
+                    o.id,
+                    o.client,
+                    o.phone,
+                    o.address,
+                    o.city,
+                    o.total,
+                    o.status,
+                    new Date(o.date).toLocaleDateString('fr-FR')
+                ])
+            ].map(row => row.join(',')).join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `commandes_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        // Charger les commandes au démarrage
+        loadOrders();
+
+        // Fermer la modal en cliquant dehors
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailsModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
