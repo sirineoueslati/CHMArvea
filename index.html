@@ -382,7 +382,7 @@ async function sendOrderEmail(order) {
         console.error('Erreur:', error);
         alert(`✅ Commande confirmée! #${order.id}\n\n⚠️ Erreur de connexion au serveur email.\n\nNous vous contacterons via SMS au ${order.phone}`);
     }
-}
+
 
     // Récupérer les données du formulaire
     const form = e.target;
@@ -427,8 +427,8 @@ async function sendOrderEmail(order) {
     cart = [];
     updateCart();
     closeCheckout();
-}
 
+}
         function filterProducts() {
             const search = document.getElementById('searchInput').value.toLowerCase();
             const cards = document.querySelectorAll('.product-card');
