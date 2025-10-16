@@ -1,0 +1,8 @@
+{
+  "buildCommand": "npm install",
+  "functions": {
+    "api/send-email.js": {
+      "maxDuration": 30
+    }
+  }
+}
