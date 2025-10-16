@@ -140,7 +140,7 @@ header {
 .product-image {
     height: 250px;
     width: 100%;
-    object-fit: cover;
+    object-fit: contain;
     background: linear-gradient(135deg, #e8d5d0 0%, #f0e5df 100%);
     display: flex;
     align-items: center;
