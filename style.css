@@ -12,7 +12,7 @@ body {
 }
 
 header {
-    background: linear-gradient(135deg, #d4a5a5 0%, #c48b8b 100%);
+    background: linear-gradient(135deg, #f5e8e3 0%, #f0ddd6 100%);
     padding: 1.5rem 2rem;
     box-shadow: 0 4px 15px rgba(212, 165, 165, 0.2);
     position: sticky;
@@ -37,15 +37,15 @@ header {
 }
 
 .cart-btn {
-    background: white;
-    color: #c48b8b;
+    background: linear-gradient(135deg, #d4a5a5 0%, #c48b8b 100%);
+    color: white;
     border: none;
     padding: 0.8rem 1.5rem;
     border-radius: 25px;
     cursor: pointer;
     font-weight: bold;
     transition: all 0.3s;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(212, 165, 165, 0.2);
 }
 
 .cart-btn:hover {
