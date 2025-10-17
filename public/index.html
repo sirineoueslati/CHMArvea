@@ -34,6 +34,27 @@
         </div>
         <div class="products-grid" id="productsGrid"></div>
     </div>
+    <div class="card-container">
+    <div class="card" onclick="openModal('/images/Image1.jpg')">
+        <img src="/images/Image1.jpg" alt="Produit cosmétique 1">
+        <h3>Produit cosmétique 1</h3>
+        <p>50ml - 27€</p>
+    </div>
+
+    <div class="card" onclick="openModal('/images/Image2.jpg')">
+        <img src="/images/Image2.jpg" alt="Produit cosmétique 2">
+        <h3>Produit cosmétique 2</h3>
+        <p>50ml - 27€</p>
+    </div>
+
+    <!-- ajoute d'autres cards ici -->
+    </div>
+
+    <!-- Modal -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImage">
+    </div>
 
     <div class="cart-modal" id="cartModal">
         <div class="cart-content">
@@ -327,6 +348,19 @@ const products = [
         }
 
         displayProducts();
+
+        
     </script>
+    <script>
+  function openModal(imageSrc) {
+    document.getElementById("imageModal").style.display = "block";
+    document.getElementById("modalImage").src = imageSrc;
+  }
+
+  function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+  }
+</script>
+
 </body>
 </html>
