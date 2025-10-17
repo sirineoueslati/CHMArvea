@@ -34,27 +34,7 @@
         </div>
         <div class="products-grid" id="productsGrid"></div>
     </div>
-    <div class="card-container">
-    <div class="card" onclick="openModal('/images/Image1.jpg')">
-        <img src="/images/Image1.jpg" alt="Produit cosmétique 1">
-        <h3>Produit cosmétique 1</h3>
-        <p>50ml - 27€</p>
-    </div>
-
-    <div class="card" onclick="openModal('/images/Image2.jpg')">
-        <img src="/images/Image2.jpg" alt="Produit cosmétique 2">
-        <h3>Produit cosmétique 2</h3>
-        <p>50ml - 27€</p>
-    </div>
-
-    <!-- ajoute d'autres cards ici -->
-    </div>
-
-    <!-- Modal -->
-    <div id="imageModal" class="modal" onclick="closeModal()">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="modalImage">
-    </div>
+   
 
     <div class="cart-modal" id="cartModal">
         <div class="cart-content">
@@ -183,22 +163,62 @@ const products = [
 
         let cart = [];
 
+        // function displayProducts() {
+        //     const grid = document.getElementById('productsGrid');
+        //     grid.innerHTML = products.map(p => `
+        //         <div class="product-card">
+        //             <div class="product-image">
+        //                 <img src="${p.image}" alt="${p.name}">
+        //             </div>
+        //             <div class="product-info">
+        //                 <div class="product-name">${p.name}</div>
+        //                 <div class="product-volume">${p.volume}</div>
+        //                 <div class="product-price">${p.price} DT</div>
+        //                 <button class="add-to-cart" onclick="addToCart(${p.id})">Ajouter au panier</button>
+        //             </div>
+        //         </div>
+        //     `).join('');
+        // }
         function displayProducts() {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = products.map(p => `
-                <div class="product-card">
-                    <div class="product-image">
-                        <img src="${p.image}" alt="${p.name}">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-name">${p.name}</div>
-                        <div class="product-volume">${p.volume}</div>
-                        <div class="product-price">${p.price} DT</div>
-                        <button class="add-to-cart" onclick="addToCart(${p.id})">Ajouter au panier</button>
-                    </div>
-                </div>
-            `).join('');
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = products.map(p => `
+        <div class="product-card" onclick="openImageModal('${p.image}', '${p.name}', '${p.volume}', '${p.price}')">
+            <div class="product-image">
+                <img src="${p.image}" alt="${p.name}">
+            </div>
+            <div class="product-info">
+                <div class="product-name">${p.name}</div>
+                <div class="product-volume">${p.volume}</div>
+                <div class="product-price">${p.price} DT</div>
+                <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${p.id})">Ajouter au panier</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+    // Ouvrir le modal zoom
+    function openImageModal(imageSrc, productName, volume, price) {
+        document.getElementById('imageModal').style.display = 'block';
+        document.getElementById('modalImage').src = imageSrc;
+        document.getElementById('modalProductInfo').innerHTML = `
+            <h2>${productName}</h2>
+            <p><strong>Volume:</strong> ${volume}</p>
+            <p style="color: #c48b8b; font-size: 1.3rem; font-weight: bold; margin-top: 0.5rem;">${price} DT</p>
+        `;
+    }
+
+    // Fermer le modal zoom
+    function closeImageModal() {
+        document.getElementById('imageModal').style.display = 'none';
+    }
+
+    // Fermer en cliquant en dehors de l'image
+    window.onclick = function(event) {
+        const modal = document.getElementById('imageModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
         }
+    }
 
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
@@ -351,16 +371,14 @@ const products = [
 
         
     </script>
-    <script>
-  function openModal(imageSrc) {
-    document.getElementById("imageModal").style.display = "block";
-    document.getElementById("modalImage").src = imageSrc;
-  }
 
-  function closeModal() {
-    document.getElementById("imageModal").style.display = "none";
-  }
-</script>
-
+<!-- Modal pour Zoom Image -->
+<div class="modal" id="imageModal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeImageModal()">&times;</span>
+        <img id="modalImage" src="" alt="Produit zoomé">
+        <div class="modal-product-info" id="modalProductInfo"></div>
+    </div>
+</div>
 </body>
 </html>
