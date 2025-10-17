@@ -338,7 +338,7 @@ const products = [
             localStorage.setItem('cmStoreOrders', JSON.stringify(orders));
 
             try {
-                const response = await fetch('https://chm-arvea.vercel.app/api/send-order-email', {
+                const response = await fetch('https://chm-arvea.vercel.app/api/send-email', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({clientEmail: order.email, clientName: order.client, orderId: order.id, products: order.products, total: order.total, address: order.address, city: order.city, phone: order.phone})
