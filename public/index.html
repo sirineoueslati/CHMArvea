@@ -101,9 +101,9 @@ const products = [
   {id: 10, name: "Sérum Cheuveux Olymiel Family Style", price: 43, volume: "50ml", image: "/images/Image10.jpg"},
   {id: 11, name: "Crème de Jour ", price: 43, volume: "50ml", image: "/images/Image11.jpg"},
   {id: 12, name: "Gel Nettoyant", price: 30, volume: "50ml", image: "/images/Image12.jpg"},
-  {id: 13, name: "Produit cosmétique 13", price: 75, volume: "50ml", image: "/images/Image13.jpg"},
-  {id: 14, name: "Parfum Harem", price: 99, volume: "50ml", image: "/images/Image14.jpg"},
-  {id: 15, name: "Coffret Harem", price: 78, volume: "50ml", image: "/images/Image15.jpg"},
+  {id: 13, name: "Parfum insolite", price: 75, volume: "50ml", image: "/images/Image13.jpg"},
+  {id: 14, name: "Coffret  Harem", price: 99, volume: "50ml", image: "/images/Image14.jpg"},
+  {id: 15, name: "Parfum Harem", price: 78, volume: "50ml", image: "/images/Image15.jpg"},
   {id: 16, name: "Déodorant Floral Fresh", price: 27, volume: "50ml", image: "/images/Image16.jpg"},
   {id: 17, name: "Wellness Sleep & Zen", price: 34, volume: "50ml", image: "/images/Image17.jpg"},
   {id: 18, name: "Spiruline", price: 49.8, volume: "50ml", image: "/images/Image18.jpg"},
@@ -369,18 +369,18 @@ const products = [
 
         displayProducts();
 
-        
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('header');
-    const hero = document.querySelector('.hero');
-    if (window.scrollY > 100) { // si on a scrollé de 100px ou plus
-        header.classList.add('shrink');
-        hero.classList.add('shrink');
-    } else {
-        header.classList.remove('shrink');
-        hero.classList.remove('shrink');
-    }
-});
+
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            const hero = document.querySelector('.hero');
+            if (window.scrollY > 100) { // si on a scrollé de 100px ou plus
+                header.classList.add('shrink');
+                hero.classList.add('shrink');
+            } else {
+                header.classList.remove('shrink');
+                hero.classList.remove('shrink');
+            }
+        });
 
         
     </script>
