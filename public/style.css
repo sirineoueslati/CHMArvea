@@ -555,3 +555,27 @@ header {
         font-size: 2rem;
     }
 }
+
+
+/* Quand le header est sticky en scroll */
+header.shrink {
+    padding: 0.5rem 2rem;
+    box-shadow: 0 2px 10px rgba(212, 165, 165, 0.2);
+    transition: all 0.3s ease;
+}
+
+header.shrink .logo img {
+    height: 80px; /* logo réduit */
+}
+
+header.shrink .hero {
+    padding: 2rem 2rem; /* hero moins haut */
+}
+
+.hero.shrink h1 {
+    font-size: 1.8rem;
+}
+
+.hero.shrink p {
+    font-size: 1rem;
+}

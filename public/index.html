@@ -370,6 +370,19 @@ const products = [
         displayProducts();
 
         
+window.addEventListener('scroll', () => {
+    const header = document.querySelector('header');
+    const hero = document.querySelector('.hero');
+    if (window.scrollY > 100) { // si on a scrollé de 100px ou plus
+        header.classList.add('shrink');
+        hero.classList.add('shrink');
+    } else {
+        header.classList.remove('shrink');
+        hero.classList.remove('shrink');
+    }
+});
+
+        
     </script>
 
 <!-- Modal pour Zoom Image -->
