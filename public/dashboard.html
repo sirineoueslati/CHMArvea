@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS Admin Dashboard | CM Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #d4a5a5 0%, #c48b8b 100%);
+            color: white;
+            padding: 2rem 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            padding: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            border-left-color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+        }
+
+        .topbar {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #c48b8b;
+        }
+
+        .logout-btn {
+            background: #f8d7da;
+            color: #721c24;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #f5c6cb;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Stats Cards */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #c48b8b;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #c48b8b;
+        }
+
+        /* Forms */
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="file"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #c48b8b;
+            box-shadow: 0 0 10px rgba(196, 139, 139, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4a5a5 0%, #c48b8b 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 165, 165, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn-danger:hover {
+            background: #f5c6cb;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f9f9f9;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 2px solid #ddd;
+            color: #c48b8b;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background: #fafafa;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #c48b8b;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                position: absolute;
+                width: 100%;
+                height: auto;
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">📦 CMS Store</div>
+            <ul class="sidebar-menu">
+                <li><a href="#" onclick="showPage('dashboard')" class="menu-link active" data-page="dashboard">📊 Dashboard</a></li>
+                <li><a href="#" onclick="showPage('categories')" class="menu-link" data-page="categories">📁 Catégories</a></li>
+                <li><a href="#" onclick="showPage('products')" class="menu-link" data-page="products">📦 Produits</a></li>
+                <li><a href="#" onclick="showPage('orders')" class="menu-link" data-page="orders">📋 Commandes</a></li>
+                <li><a href="#" onclick="logout()" class="menu-link">🚪 Déconnexion</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="topbar">
+                <div class="topbar-title" id="pageTitle">Dashboard</div>
+                <button class="logout-btn" onclick="logout()">Déconnexion</button>
+            </div>
+
+            <div class="content">
+                <!-- Dashboard Page -->
+                <div class="page-section active" id="dashboard">
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Produits</div>
+                            <div class="stat-value" id="totalProducts">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Catégories</div>
+                            <div class="stat-value" id="totalCategories">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Commandes Totales</div>
+                            <div class="stat-value" id="totalOrders">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Revenus Totaux</div>
+                            <div class="stat-value" id="totalRevenue">0 DT</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Page -->
+                <div class="page-section" id="categories">
+                    <div class="form-container">
+                        <h2>Ajouter une Catégorie</h2>
+                        <form onsubmit="addCategory(event)">
+                            <div class="form-group">
+                                <label>Nom de la catégorie</label>
+                                <input type="text" id="categoryName" placeholder="Ex: Shampooings" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea id="categoryDesc" placeholder="Description..." rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ajouter Catégorie</button>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesList"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Products Page -->
+                <div class="page-section" id="products">
+                    <div class="form-container">
+                        <h2>Ajouter un Produit</h2>
+                        <form onsubmit="addProduct(event)">
+                            <div class="form-group">
+                                <label>Titre</label>
+                                <input type="text" id="productTitle" placeholder="Titre du produit" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Catégorie</label>
+                                <select id="productCategory" required>
+                                    <option value="">Sélectionner une catégorie</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Prix (DT)</label>
+                                <input type="number" id="productPrice" placeholder="0.00" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Volume</label>
+                                <input type="text" id="productVolume" placeholder="Ex: 50ml" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea id="productDesc" placeholder="Description..." rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>URL Image</label>
+                                <input type="text" id="productImage" placeholder="https://...">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ajouter Produit</button>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Titre</th>
+                                    <th>Catégorie</th>
+                                    <th>Prix</th>
+                                    <th>Volume</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsList"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Orders Page -->
+                <div class="page-section" id="orders">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Client</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersList"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize data
+        function initData() {
+            if (!localStorage.getItem('categories')) {
+                localStorage.setItem('categories', JSON.stringify([]));
+            }
+            if (!localStorage.getItem('cmStoreProducts')) {
+                localStorage.setItem('cmStoreProducts', JSON.stringify([]));
+            }
+            loadDashboard();
+        }
+
+        function checkAdminAccess() {
+            if (!sessionStorage.getItem('adminSession')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('adminSession');
+            window.location.href = 'login.html';
+        }
+
+        function showPage(pageName) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(pageName).classList.add('active');
+            
+            document.querySelectorAll('.menu-link').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const titles = {
+                dashboard: 'Dashboard',
+                categories: 'Catégories',
+                products: 'Produits',
+                orders: 'Commandes'
+            };
+            document.getElementById('pageTitle').textContent = titles[pageName];
+
+            if (pageName === 'categories') loadCategories();
+            if (pageName === 'products') loadProducts();
+            if (pageName === 'orders') loadOrders();
+        }
+
+        // Dashboard
+        function loadDashboard() {
+            const products = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
+            const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+            const orders = JSON.parse(localStorage.getItem('cmStoreOrders') || '[]');
+            const revenue = orders.reduce((sum, o) => sum + parseFloat(o.total), 0);
+
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalCategories').textContent = categories.length;
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('totalRevenue').textContent = revenue.toFixed(3) + ' DT';
+        }
+
+        // Categories
+        function addCategory(e) {
+            e.preventDefault();
+            const name = document.getElementById('categoryName').value;
+            const desc = document.getElementById('categoryDesc').value;
+            
+            const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+            categories.push({
+                id: Date.now(),
+                name,
+                desc
+            });
+            
+            localStorage.setItem('categories', JSON.stringify(categories));
+            e.target.reset();
+            loadCategories();
+            loadDashboard();
+        }
+
+        function loadCategories() {
+            const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+            const html = categories.length ? categories.map(cat => `
+                <tr>
+                    <td>${cat.name}</td>
+                    <td>${cat.desc}</td>
+                    <td>
+                        <button class="btn btn-danger btn-small" onclick="deleteCategory(${cat.id})">Supprimer</button>
+                    </td>
+                </tr>
+            `).join('') : '<tr><td colspan="3" class="empty-state">Aucune catégorie</td></tr>';
+            
+            document.getElementById('categoriesList').innerHTML = html;
+            updateCategorySelect();
+        }
+
+        function deleteCategory(id) {
+            if (confirm('Supprimer cette catégorie?')) {
+                let categories = JSON.parse(localStorage.getItem('categories') || '[]');
+                categories = categories.filter(c => c.id !== id);
+                localStorage.setItem('categories', JSON.stringify(categories));
+                loadCategories();
+                loadDashboard();
+            }
+        }
+
+        function updateCategorySelect() {
+            const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+            const select = document.getElementById('productCategory');
+            select.innerHTML = '<option value="">Sélectionner une catégorie</option>' + 
+                categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        }
+
+        // Products
+        function addProduct(e) {
+            e.preventDefault();
+            const product = {
+                id: Date.now(),
+                name: document.getElementById('productTitle').value,
+                categoryId: document.getElementById('productCategory').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                volume: document.getElementById('productVolume').value,
+                description: document.getElementById('productDesc').value,
+                image: document.getElementById('productImage').value
+            };
+
+            let products = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
+            products.push(product);
+            localStorage.setItem('cmStoreProducts', JSON.stringify(products));
+            e.target.reset();
+            loadProducts();
+            loadDashboard();
+        }
+
+        function loadProducts() {
+            const products = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
+            const categories = JSON.parse(localStorage.getItem('categories') || '[]');
+            
+            const html = products.length ? products.map(prod => {
+                const cat = categories.find(c => c.id == prod.categoryId);
+                return `
+                    <tr>
+                        <td>${prod.name}</td>
+                        <td>${cat ? cat.name : 'N/A'}</td>
+                        <td>${prod.price} DT</td>
+                        <td>${prod.volume}</td>
+                        <td>
+                            <button class="btn btn-danger btn-small" onclick="deleteProduct(${prod.id})">Supprimer</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('') : '<tr><td colspan="5" class="empty-state">Aucun produit</td></tr>';
+            
+            document.getElementById('productsList').innerHTML = html;
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Supprimer ce produit?')) {
+                let products = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('cmStoreProducts', JSON.stringify(products));
+                loadProducts();
+                loadDashboard();
+            }
+        }
+
+        // Orders
+        function loadOrders() {
+            const orders = JSON.parse(localStorage.getItem('cmStoreOrders') || '[]');
+            const html = orders.length ? orders.map(order => `
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${order.client}</td>
+                    <td>${order.total} DT</td>
+                    <td>${order.status}</td>
+                    <td>${new Date(order.date).toLocaleDateString('fr-FR')}</td>
+                    <td>
+                        <button class="btn btn-secondary btn-small" onclick="viewOrder(${order.id})">Voir</button>
+                    </td>
+                </tr>
+            `).join('') : '<tr><td colspan="6" class="empty-state">Aucune commande</td></tr>';
+            
+            document.getElementById('ordersList').innerHTML = html;
+        }
+
+        function viewOrder(id) {
+            const orders = JSON.parse(localStorage.getItem('cmStoreOrders') || '[]');
+            const order = orders.find(o => o.id == id);
+            if (order) {
+                alert(`Commande #${order.id}\nClient: ${order.client}\nMontant: ${order.total} DT\nStatut: ${order.status}`);
+            }
+        }
+
+        // On Load
+        checkAdminAccess();
+        initData();
+    </script>
+</body>
+</html>
