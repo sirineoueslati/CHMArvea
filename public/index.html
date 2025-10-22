@@ -89,6 +89,7 @@
     <script>
         let products = [];
         let cart = [];
+        let lastProductCount = 0;
 
         // Charger les produits depuis localStorage
       function loadProducts() {
@@ -362,14 +363,12 @@
         // Charger les produits au démarrage
         loadProducts();
 
-        // Rafraîchir les produits toutes les 5 secondes pour detecter les changements du CMS
-        setInterval(() => {
-            const newProducts = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
-            if (newProducts.length > products.length) {
-                products = newProducts;
-                displayProducts();
-            }
-        }, 5000);
+  // Ecouter les changements dans localStorage (changement depuis une autre onglet/CMS)
+window.addEventListener('storage', (e) => {
+    if (e.key === 'cmStoreProducts') {
+        loadProducts();
+    }
+});
 
         window.addEventListener('scroll', () => {
             const header = document.querySelector('header');
