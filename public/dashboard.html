@@ -22,7 +22,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 250px;
             background: linear-gradient(135deg, #d4a5a5 0%, #c48b8b 100%);
@@ -31,6 +30,7 @@
             position: fixed;
             height: 100vh;
             overflow-y: auto;
+            z-index: 100;
         }
 
         .sidebar-logo {
@@ -64,7 +64,6 @@
             border-left-color: white;
         }
 
-        /* Main Content */
         .main-content {
             margin-left: 250px;
             flex: 1;
@@ -112,7 +111,6 @@
             display: block;
         }
 
-        /* Stats Cards */
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -140,7 +138,6 @@
             color: #c48b8b;
         }
 
-        /* Forms */
         .form-container {
             background: white;
             padding: 2rem;
@@ -164,7 +161,6 @@
         input[type="text"],
         input[type="email"],
         input[type="number"],
-        input[type="file"],
         textarea,
         select {
             width: 100%;
@@ -184,11 +180,6 @@
             box-shadow: 0 0 10px rgba(196, 139, 139, 0.2);
         }
 
-        textarea {
-            resize: vertical;
-        }
-
-        /* Buttons */
         .btn {
             padding: 0.8rem 1.5rem;
             border: none;
@@ -209,30 +200,29 @@
             box-shadow: 0 4px 12px rgba(212, 165, 165, 0.3);
         }
 
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
-
         .btn-danger {
             background: #f8d7da;
             color: #721c24;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
         }
 
         .btn-danger:hover {
             background: #f5c6cb;
         }
 
-        .btn-small {
+        .btn-edit {
+            background: #cfe2ff;
+            color: #084298;
             padding: 0.5rem 1rem;
             font-size: 0.9rem;
+            margin-right: 0.5rem;
         }
 
-        /* Tables */
+        .btn-edit:hover {
+            background: #b6d4fe;
+        }
+
         .table-container {
             background: white;
             border-radius: 10px;
@@ -267,7 +257,34 @@
             background: #fafafa;
         }
 
-        /* Modal */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .pagination button.active {
+            background: #c48b8b;
+            color: white;
+            border-color: #c48b8b;
+        }
+
+        .pagination button:hover {
+            border-color: #c48b8b;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -309,6 +326,37 @@
             color: #999;
         }
 
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 0.6rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
         .empty-state {
             text-align: center;
             padding: 3rem;
@@ -316,36 +364,16 @@
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                width: 200px;
-            }
-
-            .main-content {
-                margin-left: 200px;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .sidebar {
-                position: absolute;
-                width: 100%;
-                height: auto;
-                transform: translateX(-100%);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
+            .sidebar { width: 200px; }
+            .main-content { margin-left: 200px; }
+            .stats { grid-template-columns: 1fr; }
+            table { font-size: 0.85rem; }
+            th, td { padding: 0.8rem; }
         }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-logo">📦 CMS Store</div>
             <ul class="sidebar-menu">
@@ -357,7 +385,6 @@
             </ul>
         </aside>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="topbar">
                 <div class="topbar-title" id="pageTitle">Dashboard</div>
@@ -365,7 +392,7 @@
             </div>
 
             <div class="content">
-                <!-- Dashboard Page -->
+                <!-- Dashboard -->
                 <div class="page-section active" id="dashboard">
                     <div class="stats">
                         <div class="stat-card">
@@ -387,7 +414,7 @@
                     </div>
                 </div>
 
-                <!-- Categories Page -->
+                <!-- Categories -->
                 <div class="page-section" id="categories">
                     <div class="form-container">
                         <h2>Ajouter une Catégorie</h2>
@@ -403,7 +430,6 @@
                             <button type="submit" class="btn btn-primary">Ajouter Catégorie</button>
                         </form>
                     </div>
-
                     <div class="table-container">
                         <table>
                             <thead>
@@ -418,7 +444,7 @@
                     </div>
                 </div>
 
-                <!-- Products Page -->
+                <!-- Products -->
                 <div class="page-section" id="products">
                     <div class="form-container">
                         <h2>Ajouter un Produit</h2>
@@ -452,7 +478,6 @@
                             <button type="submit" class="btn btn-primary">Ajouter Produit</button>
                         </form>
                     </div>
-
                     <div class="table-container">
                         <table>
                             <thead>
@@ -466,17 +491,38 @@
                             </thead>
                             <tbody id="productsList"></tbody>
                         </table>
+                        <div class="pagination" id="productsPagination"></div>
                     </div>
                 </div>
 
-                <!-- Orders Page -->
+                <!-- Orders -->
                 <div class="page-section" id="orders">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label>Rechercher par nom</label>
+                            <input type="text" id="searchName" placeholder="Nom client..." onkeyup="filterOrders()">
+                        </div>
+                        <div class="filter-group">
+                            <label>Rechercher par téléphone</label>
+                            <input type="text" id="searchPhone" placeholder="Numéro..." onkeyup="filterOrders()">
+                        </div>
+                        <div class="filter-group">
+                            <label>Filtrer par statut</label>
+                            <select id="filterStatus" onchange="filterOrders()">
+                                <option value="">Tous les statuts</option>
+                                <option value="pending">En Attente</option>
+                                <option value="confirmed">Confirmée</option>
+                                <option value="contacted">Recontactée</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Client</th>
+                                    <th>Téléphone</th>
                                     <th>Montant</th>
                                     <th>Statut</th>
                                     <th>Date</th>
@@ -491,17 +537,39 @@
         </div>
     </div>
 
+    <!-- Modal édition produit -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeEditModal()">&times;</span>
+            <div class="modal-header">Éditer Produit</div>
+            <form onsubmit="saveProduct(event)">
+                <div class="form-group">
+                    <label>Titre</label>
+                    <input type="text" id="editProductTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Prix (DT)</label>
+                    <input type="number" id="editProductPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Volume</label>
+                    <input type="text" id="editProductVolume" required>
+                </div>
+                <div class="form-group">
+                    <label>URL Image</label>
+                    <input type="text" id="editProductImage">
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Initialize data
-        function initData() {
-            if (!localStorage.getItem('categories')) {
-                localStorage.setItem('categories', JSON.stringify([]));
-            }
-            if (!localStorage.getItem('cmStoreProducts')) {
-                localStorage.setItem('cmStoreProducts', JSON.stringify([]));
-            }
-            loadDashboard();
-        }
+        let allOrders = [];
+        let allProducts = [];
+        let currentPage = 1;
+        const productsPerPage = 10;
+        let editingProductId = null;
 
         function checkAdminAccess() {
             if (!sessionStorage.getItem('adminSession')) {
@@ -530,11 +598,10 @@
             document.getElementById('pageTitle').textContent = titles[pageName];
 
             if (pageName === 'categories') loadCategories();
-            if (pageName === 'products') loadProducts();
+            if (pageName === 'products') { currentPage = 1; loadProducts(); }
             if (pageName === 'orders') loadOrders();
         }
 
-        // Dashboard
         function loadDashboard() {
             const products = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
             const categories = JSON.parse(localStorage.getItem('categories') || '[]');
@@ -550,16 +617,12 @@
         // Categories
         function addCategory(e) {
             e.preventDefault();
-            const name = document.getElementById('categoryName').value;
-            const desc = document.getElementById('categoryDesc').value;
-            
             const categories = JSON.parse(localStorage.getItem('categories') || '[]');
             categories.push({
                 id: Date.now(),
-                name,
-                desc
+                name: document.getElementById('categoryName').value,
+                desc: document.getElementById('categoryDesc').value
             });
-            
             localStorage.setItem('categories', JSON.stringify(categories));
             e.target.reset();
             loadCategories();
@@ -572,18 +635,15 @@
                 <tr>
                     <td>${cat.name}</td>
                     <td>${cat.desc}</td>
-                    <td>
-                        <button class="btn btn-danger btn-small" onclick="deleteCategory(${cat.id})">Supprimer</button>
-                    </td>
+                    <td><button class="btn btn-danger" onclick="deleteCategory(${cat.id})">Supprimer</button></td>
                 </tr>
             `).join('') : '<tr><td colspan="3" class="empty-state">Aucune catégorie</td></tr>';
-            
             document.getElementById('categoriesList').innerHTML = html;
             updateCategorySelect();
         }
 
         function deleteCategory(id) {
-            if (confirm('Supprimer cette catégorie?')) {
+            if (confirm('Supprimer?')) {
                 let categories = JSON.parse(localStorage.getItem('categories') || '[]');
                 categories = categories.filter(c => c.id !== id);
                 localStorage.setItem('categories', JSON.stringify(categories));
@@ -602,7 +662,8 @@
         // Products
         function addProduct(e) {
             e.preventDefault();
-            const product = {
+            const products = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
+            products.push({
                 id: Date.now(),
                 name: document.getElementById('productTitle').value,
                 categoryId: document.getElementById('productCategory').value,
@@ -610,23 +671,23 @@
                 volume: document.getElementById('productVolume').value,
                 description: document.getElementById('productDesc').value,
                 image: document.getElementById('productImage').value || '/images/placeholder.png'
-            };
-
-            let products = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
-            products.push(product);
+            });
             localStorage.setItem('cmStoreProducts', JSON.stringify(products));
-            
-            alert('✅ Produit ajouté avec succès!');
+            alert('✅ Produit ajouté!');
             e.target.reset();
             loadProducts();
             loadDashboard();
         }
 
         function loadProducts() {
-            const products = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
+            allProducts = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
             const categories = JSON.parse(localStorage.getItem('categories') || '[]');
             
-            const html = products.length ? products.map(prod => {
+            const start = (currentPage - 1) * productsPerPage;
+            const end = start + productsPerPage;
+            const paginatedProducts = allProducts.slice(start, end);
+
+            const html = paginatedProducts.length ? paginatedProducts.map(prod => {
                 const cat = categories.find(c => c.id == prod.categoryId);
                 return `
                     <tr>
@@ -635,13 +696,69 @@
                         <td>${prod.price} DT</td>
                         <td>${prod.volume}</td>
                         <td>
-                            <button class="btn btn-danger btn-small" onclick="deleteProduct(${prod.id})">Supprimer</button>
+                            <button class="btn btn-edit" onclick="openEditModal(${prod.id})">✏️ Éditer</button>
+                            <button class="btn btn-danger" onclick="deleteProduct(${prod.id})">🗑️</button>
                         </td>
                     </tr>
                 `;
             }).join('') : '<tr><td colspan="5" class="empty-state">Aucun produit</td></tr>';
             
             document.getElementById('productsList').innerHTML = html;
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(allProducts.length / productsPerPage);
+            const html = [];
+            
+            for (let i = 1; i <= totalPages; i++) {
+                html.push(`
+                    <button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
+                            onclick="goToPage(${i})">${i}</button>
+                `);
+            }
+            
+            document.getElementById('productsPagination').innerHTML = html.join('');
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            loadProducts();
+        }
+
+        function openEditModal(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (product) {
+                editingProductId = productId;
+                document.getElementById('editProductTitle').value = product.name;
+                document.getElementById('editProductPrice').value = product.price;
+                document.getElementById('editProductVolume').value = product.volume;
+                document.getElementById('editProductImage').value = product.image;
+                document.getElementById('editModal').classList.add('show');
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+            editingProductId = null;
+        }
+
+        function saveProduct(e) {
+            e.preventDefault();
+            const products = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
+            const idx = products.findIndex(p => p.id === editingProductId);
+            
+            if (idx !== -1) {
+                products[idx].name = document.getElementById('editProductTitle').value;
+                products[idx].price = parseFloat(document.getElementById('editProductPrice').value);
+                products[idx].volume = document.getElementById('editProductVolume').value;
+                products[idx].image = document.getElementById('editProductImage').value;
+                localStorage.setItem('cmStoreProducts', JSON.stringify(products));
+                alert('✅ Produit mis à jour!');
+                closeEditModal();
+                loadProducts();
+                loadDashboard();
+            }
         }
 
         function deleteProduct(id) {
@@ -656,34 +773,61 @@
 
         // Orders
         function loadOrders() {
-            const orders = JSON.parse(localStorage.getItem('cmStoreOrders') || '[]');
-            const html = orders.length ? orders.map(order => `
+            allOrders = JSON.parse(localStorage.getItem('cmStoreOrders') || '[]');
+            filterOrders();
+        }
+
+        function filterOrders() {
+            const searchName = document.getElementById('searchName').value.toLowerCase();
+            const searchPhone = document.getElementById('searchPhone').value.toLowerCase();
+            const filterStatus = document.getElementById('filterStatus').value;
+
+            const filtered = allOrders.filter(order => {
+                const matchName = order.client.toLowerCase().includes(searchName);
+                const matchPhone = order.phone.toLowerCase().includes(searchPhone);
+                const matchStatus = !filterStatus || order.status === filterStatus;
+                return matchName && matchPhone && matchStatus;
+            });
+
+            const html = filtered.length ? filtered.map(order => `
                 <tr>
                     <td>#${order.id}</td>
                     <td>${order.client}</td>
+                    <td>${order.phone}</td>
                     <td>${order.total} DT</td>
-                    <td>${order.status}</td>
-                    <td>${new Date(order.date).toLocaleDateString('fr-FR')}</td>
                     <td>
-                        <button class="btn btn-secondary btn-small" onclick="viewOrder(${order.id})">Voir</button>
+                        <select onchange="updateOrderStatus(${order.id}, this.value)">
+                            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>En Attente</option>
+                            <option value="confirmed" ${order.status === 'confirmed' ? 'selected' : ''}>Confirmée</option>
+                            <option value="contacted" ${order.status === 'contacted' ? 'selected' : ''}>Recontactée</option>
+                        </select>
                     </td>
+                    <td>${new Date(order.date).toLocaleDateString('fr-FR')}</td>
+                    <td><button class="btn btn-edit" onclick="viewOrder(${order.id})">👁️</button></td>
                 </tr>
-            `).join('') : '<tr><td colspan="6" class="empty-state">Aucune commande</td></tr>';
-            
+            `).join('') : '<tr><td colspan="7" class="empty-state">Aucune commande</td></tr>';
+
             document.getElementById('ordersList').innerHTML = html;
         }
 
-        function viewOrder(id) {
-            const orders = JSON.parse(localStorage.getItem('cmStoreOrders') || '[]');
-            const order = orders.find(o => o.id == id);
+        function updateOrderStatus(orderId, newStatus) {
+            const order = allOrders.find(o => o.id === orderId);
             if (order) {
-                alert(`Commande #${order.id}\nClient: ${order.client}\nMontant: ${order.total} DT\nStatut: ${order.status}`);
+                order.status = newStatus;
+                localStorage.setItem('cmStoreOrders', JSON.stringify(allOrders));
+                loadOrders();
             }
         }
 
-        // On Load
+        function viewOrder(id) {
+            const order = allOrders.find(o => o.id === id);
+            if (order) {
+                alert(`ID: #${order.id}\nClient: ${order.client}\nTél: ${order.phone}\nAdresse: ${order.address}\nVille: ${order.city}\nMontant: ${order.total} DT\nStatut: ${order.status}`);
+            }
+        }
+
         checkAdminAccess();
-        initData();
+        loadDashboard();
     </script>
 </body>
 </html>
