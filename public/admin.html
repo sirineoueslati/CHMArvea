@@ -374,6 +374,34 @@
     </style>
 </head>
 <body>
+    <script>
+    // Vérifier la session admin
+    function checkAdminAccess() {
+        const sessionData = sessionStorage.getItem('adminSession');
+        
+        if (!sessionData) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        try {
+            const session = JSON.parse(sessionData);
+            const now = new Date().getTime();
+            
+            // Vérifier l'expiration (24h)
+            if (now - session.loginTime > session.expiresIn) {
+                sessionStorage.removeItem('adminSession');
+                window.location.href = 'login.html';
+                return;
+            }
+        } catch (e) {
+            window.location.href = 'login.html';
+        }
+    }
+
+    // Vérifier l'accès avant de charger la page
+    checkAdminAccess();
+</script>
     <header>
         <div class="header-content">
             <div class="logo">📦 CM STORE - Admin</div>
