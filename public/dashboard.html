@@ -609,12 +609,14 @@
                 price: parseFloat(document.getElementById('productPrice').value),
                 volume: document.getElementById('productVolume').value,
                 description: document.getElementById('productDesc').value,
-                image: document.getElementById('productImage').value
+                image: document.getElementById('productImage').value || '/images/placeholder.png'
             };
 
             let products = JSON.parse(localStorage.getItem('cmStoreProducts') || '[]');
             products.push(product);
             localStorage.setItem('cmStoreProducts', JSON.stringify(products));
+            
+            alert('✅ Produit ajouté avec succès!');
             e.target.reset();
             loadProducts();
             loadDashboard();
