@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | CM Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fef9f5 0%, #f5ebe0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a4a47;
+        }
+
+        .login-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(212, 165, 165, 0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #c48b8b;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #c48b8b;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #a59291;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #5a4a47;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e8d5d0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #c48b8b;
+            box-shadow: 0 0 10px rgba(196, 139, 139, 0.2);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #d4a5a5 0%, #c48b8b 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 165, 165, 0.3);
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info {
+            background: #cfe2ff;
+            color: #084298;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            border: 1px solid #b6d4fe;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .back-link a {
+            color: #c48b8b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">📦</div>
+        <h1 class="title">CM STORE Admin</h1>
+        <p class="subtitle">Accès Administrateur</p>
+
+        <div class="info">
+            ℹ️ Identifiants de test: <strong>admin</strong> / <strong>cmstore2024</strong>
+        </div>
+
+        <div class="error" id="errorMessage"></div>
+
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="username">Nom d'utilisateur</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="admin"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="Mot de passe"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn-login">Accéder à l'Admin</button>
+        </form>
+
+        <div class="back-link">
+            <a href="index.html">← Retour au site</a>
+        </div>
+    </div>
+
+    <script>
+        function hashPassword(password) {
+            let hash = 0;
+            for (let i = 0; i < password.length; i++) {
+                const char = password.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash).toString();
+        }
+
+        const ADMIN_CREDENTIALS = {
+            username: 'admin',
+            passwordHash: hashPassword('cmstore2024')
+        };
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (!username || !password) {
+                showError('Veuillez remplir tous les champs');
+                return;
+            }
+
+            if (username === ADMIN_CREDENTIALS.username && 
+                hashPassword(password) === ADMIN_CREDENTIALS.passwordHash) {
+                
+                const sessionToken = generateToken();
+                const sessionData = {
+                    token: sessionToken,
+                    username: username,
+                    loginTime: new Date().getTime(),
+                    expiresIn: 24 * 60 * 60 * 1000
+                };
+
+                sessionStorage.setItem('adminSession', JSON.stringify(sessionData));
+                window.location.href = 'admin.html';
+            } else {
+                showError('Identifiant ou mot de passe incorrect');
+                document.getElementById('password').value = '';
+            }
+        }
+
+        function generateToken() {
+            return 'token_' + Math.random().toString(36).substr(2, 9) + 
+                   '_' + new Date().getTime();
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
